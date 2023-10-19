@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
   discount: {
     type: Number,
     default: function () {
-      return ((this.mrp - this.price) / this.mrp) * 100;
+      return Math.round(((this.mrp - this.price) / this.mrp) * 100);
     },
   },
   title: {

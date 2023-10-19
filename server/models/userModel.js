@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   },
 
   password: {
@@ -20,26 +21,11 @@ const userSchema = new mongoose.Schema({
   },
 
   address: {
-    house: {
-      type: String,
-      required: true,
-    },
-    street: {
-      type: String,
-      required: true,
-    },
-    city: {
-      type: String,
-      required: true,
-    },
-    state: {
-      type: String,
-      required: true,
-    },
-    pincode: {
-      type: Number,
-      required: true,
-    },
+    house: String,
+    street: String,
+    city: String,
+    state: String,
+    pincode: Number,
   },
 
   recentlyViewed: [
