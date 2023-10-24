@@ -48,6 +48,70 @@ const loginUser = async (req, res) => {
   }
 };
 
-const recentlyViewedItems = async (req, res) => {};
+const getUserProfile = async (req, res) => {
+  try {
+    const result = await User.findOne({ _id: req.user._id });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
 
-module.exports = { signupUser, loginUser, recentlyViewedItems };
+const updateUserProfile = async (req, res) => {
+  const { name, email, address } = req.body;
+  const newProfile = {};
+  if (name) {
+    newProfile.name = name;
+  }
+  if (email) {
+    newProfile.email = email;
+  }
+  if (address) {
+    newProfile.address = address;
+  }
+
+  try {
+    const result = await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { $set: newProfile },
+      { new: true }
+    );
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+const recentlyViewedItems = async (req, res) => {
+  try {
+    const result = await User.findOne({ _id: req.user._id })
+      .select(recentlyViewed)
+      .populate("recentlyViewed.product");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+const addToRecentlyViewed = async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const result = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { $push: { recentlyViewed: { product: productId } } },
+      { new: true }
+    );
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+module.exports = {
+  signupUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+  recentlyViewedItems,
+  addToRecentlyViewed,
+};

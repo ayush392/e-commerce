@@ -3,41 +3,68 @@ const {
   addToCart,
   removeFromCart,
   clearCart,
+  updateQuantity,
 } = require("../controllers/cartController");
 const requireAuth = require("../middleware/requireAuth");
-const { signupUser, loginUser } = require("../controllers/userController");
+const {
+  signupUser,
+  loginUser,
+  recentlyViewedItems,
+  addToRecentlyViewed,
+} = require("../controllers/userController");
+const {
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  clearWishlist,
+} = require("../controllers/wishlistController");
 
 const router = require("express").Router();
 
-/*
-*   signin
-*   signup
+/* 
+*   user
+        - POST signin
+        - POST signup
+        - GET view user profile
+        - PATCH update user profile
 *   recentlyViewed
-        - get all
-        - insert one
+        - GET get all items
+        - POST insert one item
 *   wishlist
-        - add to wishlist
-        - remove from wishlist
-        - move from wishlist to cart
+        - GET all items of wishlist
+        - POST add to wishlist
+        - DELETE remove item from wishlist
+        - DELETE Clear wishlist
 *   cart
-        - add an item to cart
-        - remove an item from cart
-        - clear cart
-        - update quantity of an item
+        - GET items of cart
+        - POST add an item to cart
+        - PUT update quantity of an item
+        - DELETE remove an item from cart, clear cart
+      (TODO:) 
+        - POST checkout
 */
 
-//todo: test api
+// User
 router.post("/signup", signupUser);
-
 router.post("/login", loginUser);
+router.get("/profile", requireAuth, getUserProfile);
+router.patch("/profile", requireAuth, updateUserProfile);
 
 // cart
-// TODO: test api
 router.get("/cart", requireAuth, getCartItems);
-router.put("/cart/add", requireAuth, addToCart);
-router.put("/cart/remove", requireAuth, removeFromCart);
+router.post("/cart/add", requireAuth, addToCart);
+router.put("/cart/update", requireAuth, updateQuantity);
+router.delete("/cart/remove", requireAuth, removeFromCart);
 router.delete("/cart/clear", requireAuth, clearCart);
 
-// router.get('/recent', getRecentlyViewedItems)
+// recently viewed
+router.get("/recent", requireAuth, recentlyViewedItems);
+router.post("/recent", requireAuth, addToRecentlyViewed);
+
+// Wishlist
+router.get("/wishlist", requireAuth, getWishlist);
+router.post("/wishlist/add", requireAuth, addToWishlist);
+router.delete("/wishlist/remove", requireAuth, removeFromWishlist);
+router.delete("/wishlist/clear", requireAuth, clearWishlist);
 
 module.exports = router;
