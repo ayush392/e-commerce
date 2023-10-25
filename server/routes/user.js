@@ -11,6 +11,8 @@ const {
   loginUser,
   recentlyViewedItems,
   addToRecentlyViewed,
+  getUserProfile,
+  updateUserProfile,
 } = require("../controllers/userController");
 const {
   getWishlist,

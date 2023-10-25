@@ -12,6 +12,13 @@ const orderSchema = new mongoose.Schema({
         ref: "Product",
       },
       quantity: Number,
+      size: String,
+      price: Number,
+      orderStatus: {
+        type: String,
+        enum: ["Processing", "Shipped", "Delivered", "Cancelled", "Refunded"],
+        default: "Processing",
+      },
     },
   ],
   orderDate: {
@@ -40,11 +47,6 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-  },
-  orderStatus: {
-    type: String,
-    enum: ["Processing", "Shipped", "Delivered", "Cancelled", "Refunded"],
-    default: "Processing",
   },
 });
 
