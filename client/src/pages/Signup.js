@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Signup() {
-  const [signup, { isLoading, isError, isSuccess }] = useSignupMutation();
+  const [signup, { isLoading, isError }] = useSignupMutation();
   const dispatch = useDispatch();
 
   const [errMsg, setErrMsg] = useState(null);
@@ -17,7 +17,7 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
-      setErrMsg("Please fill all the fields");
+      alert("Please fill all the fields");
       return;
     }
     try {
@@ -83,7 +83,6 @@ function Signup() {
               <button
                 className="btn btn-primary"
                 type="submit"
-                role="button"
                 disabled={isLoading}
               >
                 Signup
@@ -98,12 +97,6 @@ function Signup() {
           </div>
         </div>
       </div>
-
-      {/* <h1>Signup</h1>
-      <button onClick={handleSignup}>Signup</button>
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>ERROR</div>}
-      {isSuccess && console.log(isSuccess)} */}
     </>
   );
 }

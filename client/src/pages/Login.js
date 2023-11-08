@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Login() {
-  const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+  const [login, { isLoading, isError }] = useLoginMutation();
   const dispatch = useDispatch();
 
   const [errMsg, setErrMsg] = useState(null);
@@ -16,7 +16,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrMsg("Please fill all the fields");
+      alert("Please fill all the fields");
       return;
     }
     try {
@@ -71,7 +71,6 @@ function Login() {
               <button
                 className="btn btn-primary"
                 type="submit"
-                role="button"
                 disabled={isLoading}
               >
                 Login
