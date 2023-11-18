@@ -1,6 +1,7 @@
 const {
   getSingleProduct,
   getAllProducts,
+  getFilters,
 } = require("../controllers/productController");
 const Product = require("../models/productModel");
 
@@ -17,6 +18,7 @@ const router = require("express").Router();
  */
 
 router.get("/", getAllProducts);
+router.get("/filters", getFilters);
 router.get("/:productId", getSingleProduct);
 
 // router.get("/", async (req, res) => {
