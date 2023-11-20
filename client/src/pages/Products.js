@@ -3,9 +3,14 @@ import { useGetProductsQuery } from "../redux/apiSlices/productsApiSlice";
 import Filters from "../components/Filters";
 import ProductCard from "../components/ProductCard";
 import Navbar from "../components/Navbar";
+import { useSearchParams } from "react-router-dom";
 
 function Products() {
-  const { data, isLoading, isError, isSuccess } = useGetProductsQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { data, isLoading, isError, isSuccess } = useGetProductsQuery(
+    searchParams.toString()
+  );
+
   return (
     <>
       <Navbar />
