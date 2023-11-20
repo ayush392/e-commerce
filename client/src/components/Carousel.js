@@ -3,7 +3,11 @@ import React from "react";
 function Carousel() {
   return (
     <>
-      <div id="carouselIndicators" className="carousel slide mb-3 mb-lg-5 ">
+      <div
+        id="carouselIndicators"
+        className="carousel slide mb-3 mb-lg-5 "
+        data-bs-ride="carousel"
+      >
         <div className="carousel-indicators">
           <button
             type="button"
