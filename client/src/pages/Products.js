@@ -11,6 +11,19 @@ function Products() {
     searchParams.toString()
   );
 
+  const handleSortChange = (e) => {
+    const { name, value } = e.target;
+    searchParams.set(name, value);
+    setSearchParams(searchParams);
+  };
+
+  const getSortValue = () => {
+    if (searchParams.has("sort")) {
+      return searchParams.get("sort").toString();
+    }
+    return "recommended";
+  };
+
   return (
     <>
       <Navbar />
@@ -19,21 +32,42 @@ function Products() {
         <div>
           <Filters />
         </div>
-        <div>
-          <div className="py-2 my-1 border-bottom text-end ">
-            <button className="btn btn-outline-secondary me-5">
-              Sort by: <b>Recommended </b>
-            </button>
+        <div className="w-100">
+          <div className="container py-2 my-1 border-bottom ">
+            <div
+              class="input-group ms-auto pe-4 me-3"
+              style={{ maxWidth: "300px" }}
+            >
+              <div class="input-group-text bg-transparent" id="btnGroupAddon">
+                Sort by:
+              </div>
+              <select
+                className="form-select fw-semibold "
+                name="sort"
+                value={getSortValue()}
+                onChange={handleSortChange}
+              >
+                <option value="recommended">Recommended</option>
+                <option value="discount">Better Discount</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+              </select>
+            </div>
           </div>
 
           <div className="pt-3 container ">
             {isLoading && <div>Loading...</div>}
             {isError && <div>Something went wrong</div>}
-            {isSuccess && (
+            {isSuccess && data.length > 0 ? (
               <div className="d-flex flex-wrap justify-content-evenly">
-                {data.slice(0, 50).map((product) => (
+                {data.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
+              </div>
+            ) : (
+              <div className="text-secondary text-center">
+                <h1>No products found</h1>
+                <h3>Try applying less filters</h3>
               </div>
             )}
           </div>
