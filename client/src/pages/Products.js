@@ -35,10 +35,13 @@ function Products() {
         <div className="w-100">
           <div className="container py-2 my-1 border-bottom ">
             <div
-              class="input-group ms-auto pe-4 me-3"
+              className="input-group ms-auto pe-4 me-3"
               style={{ maxWidth: "300px" }}
             >
-              <div class="input-group-text bg-transparent" id="btnGroupAddon">
+              <div
+                className="input-group-text bg-transparent"
+                id="btnGroupAddon"
+              >
                 Sort by:
               </div>
               <select
@@ -58,13 +61,14 @@ function Products() {
           <div className="pt-3 container ">
             {isLoading && <div>Loading...</div>}
             {isError && <div>Something went wrong</div>}
-            {isSuccess && data.length > 0 ? (
+            {isSuccess && data.length > 0 && (
               <div className="d-flex flex-wrap justify-content-evenly">
                 {data.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
               </div>
-            ) : (
+            )}
+            {isSuccess && data && data.length <= 0 && (
               <div className="text-secondary text-center">
                 <h1>No products found</h1>
                 <h3>Try applying less filters</h3>
