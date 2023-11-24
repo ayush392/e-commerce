@@ -2,17 +2,34 @@ import React, { useEffect, useState } from "react";
 import { useGetSingleProductQuery } from "../redux/apiSlices/productsApiSlice";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useAddToCartMutation } from "../redux/apiSlices/cartApiSlice";
 
 function ProductDetails() {
   const { id } = useParams();
   const { data, isLoading, isError, isSuccess } = useGetSingleProductQuery(id);
   const [image, setImage] = useState(data?.imageUrl);
+  const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
+  const [selectedSize, setSelectedSize] = useState("");
   const dummyImageUrl =
     "https://img.freepik.com/premium-photo/care-instructions-label_624181-6411.jpg?size=626";
 
   useEffect(() => {
     setImage(data?.imageUrl);
   }, [data]);
+
+  const handleAddToCart = async (product) => {
+    // console.log(product);
+    if (selectedSize === "") {
+      return alert("Please select a size");
+    }
+    try {
+      const data = await addToCart(product).unwrap();
+      alert("Added to cart");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -82,10 +99,14 @@ function ProductDetails() {
                       return (
                         <div
                           key={i}
-                          className="border rounded-circle me-lg-3 me-2"
+                          className={`border rounded-circle me-lg-3 me-2 ${
+                            selectedSize === size && "text-orange border-orange"
+                          }`}
+                          role="button"
                           style={{ width: "50px", height: "50px" }}
+                          onClick={() => setSelectedSize(size)}
                         >
-                          <h6 className="m-0 p-3 text-center fw-bold ">
+                          <h6 className={`m-0 p-3 text-center fw-bold `}>
                             {size}
                           </h6>
                         </div>
@@ -103,7 +124,16 @@ function ProductDetails() {
               </div>
 
               <div className="my-4 py-lg-2 ">
-                <button className="btn btn-primary me-3 px-5 py-2 fw-semibold ">
+                <button
+                  className="btn btn-primary me-3 px-5 py-2 fw-semibold "
+                  onClick={() =>
+                    handleAddToCart({
+                      productId: data._id,
+                      quantity: 1,
+                      size: selectedSize,
+                    })
+                  }
+                >
                   <span className="me-2">🛒</span>ADD TO CART
                 </button>
                 <button className="btn btn-outline-dark px-5 py-2 fw-semibold ">

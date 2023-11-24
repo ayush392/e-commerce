@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route path="products/:id" element={<ProductDetails />} />
 
           <Route element={<RequireAuth />}>
-            {/* <Route path="cart" element={<Cart />} /> */}
+            <Route path="checkout/cart" element={<Cart />} />
           </Route>
         </Route>
       </Routes>

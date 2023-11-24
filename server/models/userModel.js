@@ -55,6 +55,7 @@ const userSchema = new mongoose.Schema({
         ref: "Product",
       },
       quantity: Number,
+      size: String,
     },
   ],
 });
