@@ -6,33 +6,33 @@ const getWishlist = async (req, res) => {
     const result = await User.findOne({ _id: req.user._id })
       .select("wishlist")
       .populate("wishlist.product");
-    res.json(result);
+    res.json(result.wishlist);
   } catch (error) {
     res.status(500).json(error.message);
   }
 };
 
 const addToWishlist = async (req, res) => {
-  const { productId } = req.body;
+  const { _id } = req.body;
   try {
     const result = await User.findByIdAndUpdate(
       { _id: req.user._id },
-      { $push: { wishlist: { product: productId } } },
+      { $push: { wishlist: { product: _id } } },
       { new: true }
-    ).populate("wishlist.product");
-
-    res.json(result);
+    ).select("wishlist");
+    console.log(result);
+    res.status(200).json(result.wishlist);
   } catch (error) {
     res.status(500).json(error.message);
   }
 };
 
 const removeFromWishlist = async (req, res) => {
-  const { productId } = req.body;
+  const { _id } = req.body;
   try {
     const result = await User.findByIdAndUpdate(
       { _id: req.user._id },
-      { $pull: { wishlist: { product: productId } } },
+      { $pull: { wishlist: { product: _id } } },
       { new: true }
     ).populate("wishlist.product");
 

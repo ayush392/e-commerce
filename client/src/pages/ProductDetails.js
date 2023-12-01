@@ -3,12 +3,14 @@ import { useGetSingleProductQuery } from "../redux/apiSlices/productsApiSlice";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAddToCartMutation } from "../redux/apiSlices/cartApiSlice";
+import { useAddToWishlistMutation } from "../redux/apiSlices/wishlistApiSlice";
 
 function ProductDetails() {
   const { id } = useParams();
   const { data, isLoading, isError, isSuccess } = useGetSingleProductQuery(id);
   const [image, setImage] = useState(data?.imageUrl);
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
+  const [addToWishlist, {}] = useAddToWishlistMutation();
   const [selectedSize, setSelectedSize] = useState("");
   const dummyImageUrl =
     "https://img.freepik.com/premium-photo/care-instructions-label_624181-6411.jpg?size=626";
@@ -31,10 +33,24 @@ function ProductDetails() {
     }
   };
 
+  const handleAddToWishlist = async (product) => {
+    console.log("req. sent", product);
+    try {
+      const data = await addToWishlist({ _id: product }).unwrap();
+      if (data[data.length - 1].product === product) {
+        alert("Added to wishlist");
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar />
       {isError && <div>Something went wrong</div>}
+      {/* {console.log(useAddToWishlistMutation()[0])} */}
       {isLoading && <div>Loading...</div>}
       {isSuccess && (
         <div className="container">
@@ -136,7 +152,10 @@ function ProductDetails() {
                 >
                   <span className="me-2">🛒</span>ADD TO CART
                 </button>
-                <button className="btn btn-outline-dark px-5 py-2 fw-semibold ">
+                <button
+                  className="btn btn-outline-dark px-5 py-2 fw-semibold "
+                  onClick={() => handleAddToWishlist(data._id)}
+                >
                   <span className="me-2">🤍</span>WISHLIST
                 </button>
               </div>
